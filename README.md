@@ -4,6 +4,10 @@ EgoFlow audits long-horizon egocentric demonstrations by learning coarse task
 progress and surfacing hesitation, regression, recovery, and abandonment windows
 for human review.
 
+**Input:** long egocentric video · **Output:** dense progress, completion score,
+and short review windows · **Scale:** 18 episodes / 25 minutes · **Training:**
+frozen visual features with small temporal heads on Modal.
+
 > **Headline result:** a self-supervised hand-dynamics model trained on 12 whole
 > episodes flags the held-aside Angry Bird review moment at 8.433–9.833 seconds
 > (14.42 robust MAD), inside the human 8–13 second label. The full review index
@@ -18,7 +22,7 @@ Post-prediction review found one correct, two ambiguous, and two incorrect.
 flowchart LR
     A["EgoVerse video<br/>+ annotations when available"] --> B["Frozen vision + language<br/>DINOv3 / Qwen3"]
     B -. "public-MP4 fallback:<br/>DINOv2 + task text" .-> C["2-layer BiGRU<br/>temporal progress model"]
-    C --> D["Coarse progress + centered<br/>progress-rate residual"]
+    C --> D["Dense coarse progress<br/>+ episode completion"]
     D --> E["Sparse review candidates<br/>regress · recover · hesitate · abandon"]
     A -. "specialized v2" .-> H["2D hand geometry<br/>position · aperture · velocity"]
     H --> I["self-supervised GRU<br/>expected hand dynamics"]
@@ -26,12 +30,12 @@ flowchart LR
     E --> F["Training-data quality signal<br/>+ human review queue"]
 ```
 
-![EgoFlow demonstration review dashboard](hackathon/egoflow/results/hero/dashboard-preview.png)
+![EgoFlow scored Angry Bird demonstration with learned progress and candidate windows](hackathon/egoflow/results/hero/angry-bird-normalized-human-vs-model.png)
 
-The neural model learns the progress representation. The centered rate residual
-and event motifs are derived from learned progress and, where disclosed, frozen
-visual dynamics. Experimental hand geometry is separately attributed. Human
-timestamp labels are validation—not training targets.
+Two neural heads are trained: a temporal progress model and a self-supervised
+hand-dynamics predictor. Event motifs may also use disclosed visual or geometric
+evidence; every interval retains its detector source. Human timestamp labels are
+validation—not training targets.
 
 ## Why
 
@@ -57,18 +61,21 @@ coarse progress**, not hierarchical semantic progress.
 
 ## Hesitation / Recovery Detection
 
-The output separates three evidence sources:
+The output keeps its evidence sources separate:
 
 - **LEARNED:** coarse progress from the BiGRU. The visualization centers its rate
   against a five-second rolling-median expectation. The presentation flips the
   sign to `(expected_rate - actual_rate) / MAD(actual_rate)`, so suspicious
   slowdowns rise upward while faster-than-expected motion falls downward.
+- **LEARNED INTERACTION:** a separate two-layer GRU learns to predict the next
+  2D hand state from position, aperture, and velocity. Robust prediction surprise
+  creates sparse interaction-deviation candidates without timestamp supervision.
 - **DERIVED:** sparse regression, hesitation, recovery, and abandonment
   *candidates* may combine learned progress deviations with
   frozen-DINO visual slowdown or loop-back evidence. The UI deliberately does not
   equate low progress rate with a human-semantic “stall” or positive rate with
   productive work.
-- **EXPERIMENTAL HAND V2:** video-only MediaPipe palm centers, hand aperture, and
+- **HAND-GEOMETRY BASELINE:** video-only MediaPipe palm centers, hand aperture, and
   redirection geometry propose `ABORTED REACH?` windows while excluding stationary
   waiting, clear close/open grasp cycles, and camera-coupled bimanual motion. This
   lane is not part of the frozen metrics. A validation-tuned variant produces 90
@@ -78,11 +85,11 @@ The output separates three evidence sources:
   hesitation/abandon labels enter the reported comparison, while one broad `other`
   span is excluded.
 
-Every proposed event records its detector as
-`learned_progress_normalized`,
-`hybrid_learned_progress_visual_dynamics`, or `frozen_visual_dynamics`. EgoFlow is
-therefore presented as a high-recall review queue, not a production-ready event
-classifier.
+Every proposed event records its detector, including
+`learned_progress_normalized`, `learned_hand_dynamics_v2`,
+`hybrid_learned_progress_visual_dynamics`, `frozen_visual_dynamics`, or
+`video_hand_geometry_v1`. EgoFlow is therefore presented as a review and
+data-curation system, not a production-ready behavioral classifier.
 
 ## Distributed Pipeline
 
@@ -195,8 +202,10 @@ open hackathon/egoflow/results/presentation/index.html
 ```
 
 Add `--video-dir`, `--hand-events-dir`, and `--interaction-events-dir` to link
-local videos and show the experimental layers. Add `--slice-dir DIR` to export
-the ≥10-second clean spans later; source videos and generated slices stay ignored.
+local videos. A private research view can add `--include-research-events`; the
+public presentation remains learned-v2 plus reviewed spans. Add `--slice-dir DIR`
+to export ≥10-second clean spans later; source videos and generated slices stay
+ignored.
 
 Episode selection is in
 [`hackathon/egoflow/episode_selection.csv`](hackathon/egoflow/episode_selection.csv),
@@ -224,8 +233,8 @@ small-sample audit, not a population estimate.
 - The manual evaluation is tiny, same-set, and covers only seven episodes.
 - Hesitation is inherently ambiguous; slowdown can be careful productive motion.
 - Progress-rate bins are not action semantics. A low rate may be careful productive
-  manipulation, so scored videos show the numerical rate instead of claiming
-  `STALL`/`PRODUCTIVE` on ordinary frames.
+  manipulation, so scored videos remain neutral on ordinary frames instead of
+  claiming `STALL` or `PRODUCTIVE`.
 - Public MP4s lack the dense semantic annotations available in private EgoVerse
   Zarr data, so this run cannot demonstrate hierarchical local/global progress.
 - The progress ranking metric is close to a trivial time-fraction baseline, and
@@ -235,8 +244,9 @@ small-sample audit, not a population estimate.
   (0/3); synthetic robustness is not a learned-reward claim.
 - Frozen-visual heuristics contribute many event proposals (16 unmatched in the
   reviewed subset); they are disclosed separately from learned progress.
-- The centered residual is a visualization of rate deviation, not a hesitation
-  classifier. It remains near zero during the human 8–13 s Angry Bird span.
+- The centered residual is retained as an analysis diagnostic, not a hesitation
+  classifier. The presentation overlay instead shows one progress curve with
+  sparse, source-aware candidate bands.
 - A separate self-supervised two-layer GRU now learns expected 2D hand dynamics
   from 12 training episodes. The selected 32-unit model flags 8.433–9.833 s in
   Angry Bird validation at 14.42 MAD surprise. This is a learned interaction
