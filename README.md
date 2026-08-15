@@ -3,6 +3,8 @@
 EgoFlow turns long egocentric robot demonstrations into a learned progress trace,
 an episode completion score, and a short queue of moments worth reviewing.
 
+**[Launch the interactive scored-video demo →](https://surajrdy.github.io/EgoFlow/)**
+
 > **Result:** 18 public EgoVerse episodes (25 minutes) were processed end to end.
 > A strict 12/3/3 episode split produced ordered completion scores for 25/50/75/100%
 > prefixes, while five full scored demonstrations are available below.

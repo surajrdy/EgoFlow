@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="EgoFlow learns dense progress and expected hand dynamics to prioritize suspicious moments in long robot demonstrations.">
+  <title>EgoFlow — Review long demonstrations faster</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="#top" aria-label="EgoFlow home">EGOFLOW</a>
+    <nav aria-label="Primary navigation">
+      <a href="#demo">Demo</a>
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+      <a class="source-link" href="https://github.com/surajrdy/EgoFlow">GitHub ↗</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <p class="eyebrow">Robotics data curation</p>
+      <h1>Find the moments<br>worth reviewing.</h1>
+      <p class="hero-copy">EgoFlow learns dense task progress and expected hand dynamics, then turns unusual transitions into a compact review queue.</p>
+      <div class="hero-proof" aria-label="Project summary">
+        <span><strong>18</strong> public episodes</span>
+        <span><strong>25 min</strong> indexed video</span>
+        <span><strong>12 / 3 / 3</strong> episode split</span>
+      </div>
+    </section>
+
+    <section class="demo-section" id="demo">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Interactive demo</p>
+          <h2>Watch the scored demonstration.</h2>
+        </div>
+        <p>Choose an episode, play the full overlay, or jump directly to a model-selected review window.</p>
+      </div>
+
+      <div class="demo-shell">
+        <div class="player-column">
+          <div class="player-frame">
+            <video id="demo-video" controls playsinline preload="metadata" poster="https://raw.githubusercontent.com/surajrdy/EgoFlow/main/hackathon/egoflow/results/hero/angry-bird-normalized-human-vs-model.png">
+              <source id="video-source" type="video/mp4">
+              Your browser does not support HTML5 video.
+            </video>
+          </div>
+          <div class="now-playing">
+            <div>
+              <p class="eyebrow">Now playing</p>
+              <h3 id="episode-title">Angry Bird · organizing plushies</h3>
+              <p class="episode-id" id="episode-id">69bb1239efeadec2abedad96</p>
+            </div>
+            <div class="completion">
+              <strong id="completion-value">95.5%</strong>
+              <span>completion estimate</span>
+            </div>
+          </div>
+        </div>
+
+        <aside class="review-panel" aria-labelledby="review-heading">
+          <p class="eyebrow">Review queue</p>
+          <h3 id="review-heading">Jump to a candidate</h3>
+          <p class="review-note" id="review-note">The hand model fires near the kinematic onset; the reviewed hesitation continues through 13 seconds.</p>
+          <div id="candidate-list" class="candidate-list"></div>
+          <p class="queue-caveat">Candidates prioritize attention. A human makes the final behavioral judgment.</p>
+        </aside>
+      </div>
+
+      <div class="episode-picker" id="episode-picker" aria-label="Choose a scored episode"></div>
+    </section>
+
+    <section class="method-section" id="method">
+      <div class="section-heading compact">
+        <div>
+          <p class="eyebrow">Architecture</p>
+          <h2>Two learned signals. One review queue.</h2>
+        </div>
+      </div>
+      <div class="architecture" aria-label="EgoFlow architecture">
+        <div class="arch-node">
+          <span>01</span>
+          <strong>Egocentric video</strong>
+          <small>Sampled RGB frames</small>
+        </div>
+        <div class="arch-arrow" aria-hidden="true">→</div>
+        <div class="arch-node split-node">
+          <div><strong>Frozen DINO</strong><small>Visual embeddings</small></div>
+          <div><strong>2D hands</strong><small>Position + aperture</small></div>
+        </div>
+        <div class="arch-arrow" aria-hidden="true">→</div>
+        <div class="arch-node split-node">
+          <div><strong>Progress BiGRU</strong><small>Long-range task state</small></div>
+          <div><strong>Hand GRU</strong><small>Expected next state</small></div>
+        </div>
+        <div class="arch-arrow" aria-hidden="true">→</div>
+        <div class="arch-node accent-node">
+          <span>04</span>
+          <strong>Review database</strong>
+          <small>Video · progress · candidates</small>
+        </div>
+      </div>
+      <div class="signal-explainer">
+        <article>
+          <span class="signal-line green"></span>
+          <h3>Dense progress</h3>
+          <p>A learned 0–100% estimate at every sampled moment, rather than one success label at the end.</p>
+        </article>
+        <article>
+          <span class="signal-line red"></span>
+          <h3>Expected hand dynamics</h3>
+          <p>A self-supervised model predicts the next 2D hand state. Large errors identify unusual interaction transitions.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="results-section" id="results">
+      <p class="eyebrow">Current evidence</p>
+      <h2>Built for review, not autonomous rejection.</h2>
+      <div class="results-grid">
+        <div><strong>5 / 8</strong><span>manually tagged events recovered</span></div>
+        <div><strong>59.25 s</strong><span>queued from 8.9 minutes reviewed</span></div>
+        <div><strong>15.35 s</strong><span>temporal-head training after caching</span></div>
+      </div>
+      <p class="limitations">The public MP4 run learns single-stage coarse progress. Dense EgoVerse semantic annotations and object-aware hand tracks are the natural next step.</p>
+    </section>
+  </main>
+
+  <footer>
+    <span>EgoFlow · long-horizon demonstration review</span>
+    <a href="https://github.com/surajrdy/EgoFlow/releases/tag/v0.1-demo">All scored videos ↗</a>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
