@@ -637,9 +637,15 @@ def _compact_progress_canvas(
     points = []
     for timestamp, progress in zip(series.timestamps_sec, series.global_progress):
         y = bottom - round((bottom - top) * max(0.0, min(1.0, progress)))
-        points.append((x_for(timestamp), y))
+        points.append((timestamp, x_for(timestamp), y))
     for first, second in zip(points, points[1:]):
-        canvas.line(*first, *second, (116, 225, 125), 3)
+        midpoint = (first[0] + second[0]) / 2.0
+        in_candidate = any(
+            label == "interaction_deviation" and start <= midpoint <= end
+            for start, end, label in highlighted_runs
+        )
+        color = COLORS["interaction_deviation"] if in_candidate else (116, 225, 125)
+        canvas.line(first[1], first[2], second[1], second[2], color, 4 if in_candidate else 3)
     return canvas
 
 
@@ -719,7 +725,12 @@ def render_scored_mp4(
                 else "LEARNED"
             )
             frame.rect(35, 62, 430, 79, COLORS["grid"])
-            frame.rect(37, 64, 37 + round(391 * progress), 77, COLORS["global"])
+            progress_color = (
+                COLORS["interaction_deviation"]
+                if active_event and str(active_event.get("label")) == "interaction_deviation"
+                else COLORS["global"]
+            )
+            frame.rect(37, 64, 37 + round(391 * progress), 77, progress_color)
             frame.text(35, 44, f"PROGRESS {progress * 100:05.1f}%", COLORS["text"], 1)
             in_human = next(
                 (
