@@ -30,6 +30,12 @@ def main() -> int:
     parser.add_argument("--dashboard", type=Path, help="write a self-contained presentation HTML")
     parser.add_argument("--hero-image", type=Path)
     parser.add_argument("--hero-video", type=Path)
+    parser.add_argument(
+        "--featured-episode",
+        action="append",
+        default=[],
+        help="episode ID to include in the public dashboard (repeatable, ordered)",
+    )
     parser.add_argument("--min-clean-sec", type=float, default=10.0)
     parser.add_argument("--guard-sec", type=float, default=0.5)
     parser.add_argument("--slice-dir", type=Path, help="optionally export clean MP4 slices now")
@@ -73,6 +79,7 @@ def main() -> int:
             args.dashboard,
             hero_image=args.hero_image,
             hero_video=args.hero_video,
+            featured_episode_ids=args.featured_episode or None,
         ))
     print(json.dumps(result, indent=2))
     return 0

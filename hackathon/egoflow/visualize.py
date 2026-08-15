@@ -597,6 +597,52 @@ def load_hand_events(source: str | Path) -> list[dict[str, object]]:
     return [dict(event) for event in payload.get("candidates", payload.get("events", []))]
 
 
+def _compact_progress_canvas(
+    series: ScoreSeries,
+    manual_events: list[dict[str, object]],
+    highlighted_runs: list[tuple[float, float, str]],
+) -> Canvas:
+    """Render the single-signal presentation panel used below scored video."""
+
+    width, height = 960, 230
+    left, right, top, bottom = 82, 925, 104, 207
+    duration = max(series.duration_sec, 1e-6)
+    canvas = Canvas(width, height, COLORS["background"])
+
+    def x_for(timestamp: float) -> int:
+        return left + round((right - left) * max(0.0, min(duration, timestamp)) / duration)
+
+    canvas.text(35, 25, f"EGOFLOW / {series.episode_id}", COLORS["text"], 2, 55)
+    canvas.rect(left, top, right, bottom, (17, 52, 47))
+    for start, end, label in highlighted_runs:
+        if label == "interaction_deviation":
+            canvas.rect(x_for(start), top, max(x_for(start) + 3, x_for(end)), bottom, (77, 27, 35))
+            canvas.rect(x_for(start), top, max(x_for(start) + 3, x_for(end)), top + 5, COLORS["interaction_deviation"])
+    for event in manual_events:
+        start = float(event.get("start_sec", 0.0))
+        end = float(event.get("end_sec", start))
+        canvas.rect(x_for(start), top, max(x_for(start) + 2, x_for(end)), top + 4, (220, 224, 228))
+    for fraction in (0.0, 0.5, 1.0):
+        x = left + round((right - left) * fraction)
+        canvas.line(x, top, x, bottom, (49, 77, 78))
+        canvas.text(max(0, x - 16), 216, f"{duration * fraction:.1f}s", COLORS["muted"], 1)
+        y = bottom - round((bottom - top) * fraction)
+        canvas.line(left, y, right, y, (49, 77, 78))
+    canvas.text(18, top - 5, "100%", COLORS["muted"], 1)
+    canvas.text(27, bottom - 7, "0%", COLORS["muted"], 1)
+    canvas.text(left, 87, "LEARNED PROGRESS", COLORS["text"], 1)
+    canvas.rect(right - 205, 84, right - 193, 96, COLORS["interaction_deviation"])
+    canvas.text(right - 187, 86, "REVIEW CANDIDATE", COLORS["muted"], 1)
+
+    points = []
+    for timestamp, progress in zip(series.timestamps_sec, series.global_progress):
+        y = bottom - round((bottom - top) * max(0.0, min(1.0, progress)))
+        points.append((x_for(timestamp), y))
+    for first, second in zip(points, points[1:]):
+        canvas.line(*first, *second, (116, 225, 125), 3)
+    return canvas
+
+
 def render_scored_mp4(
     series: ScoreSeries,
     video: str | Path,
@@ -627,16 +673,9 @@ def render_scored_mp4(
         for start, end, label in highlighted_runs
     }
     manual_events = list(manual_events or [])
-    base = _timeline_canvas(
-        series,
-        width=960,
-        height=300,
-        compact=True,
-        manual_events=manual_events,
-        max_display_events=1,
-    )
+    base = _compact_progress_canvas(series, manual_events, highlighted_runs)
     left, right = 82, 925
-    top, bottom = 86, 285
+    top, bottom = 104, 207
     with tempfile.TemporaryDirectory(prefix="egoflow_overlay_") as temp_dir:
         temp = Path(temp_dir)
         for frame_index in range(frame_count):

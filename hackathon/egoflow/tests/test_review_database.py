@@ -46,10 +46,12 @@ def test_build_review_database_indexes_sources_and_clean_spans(tmp_path):
     connection.close()
     dashboard = render_dashboard(database, tmp_path / "dashboard.html")
     contents = dashboard.read_text()
-    assert "Episode database" in contents
+    assert "Featured episodes" in contents
     assert "episode-card" in contents
     assert "HYBRID" not in contents
-    assert 'data-testid="shortlist-toggle"' in contents
+    assert "Demo reel" not in contents
+    assert "Keep in demo" not in contents
+    assert "Review strongest" not in contents
     assert 'data-action="watch"' in contents
     assert '<dialog id="viewer"' in contents
-    assert "localStorage" in contents
+    assert "localStorage" not in contents
