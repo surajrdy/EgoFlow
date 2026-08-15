@@ -1,5 +1,3 @@
-const releaseBase = "https://github.com/surajrdy/EgoFlow/releases/download/v0.1-demo";
-
 const episodes = [
   {
     id: "69bb1239efeadec2abedad96",
@@ -93,7 +91,7 @@ function renderCandidates(episode) {
 
 function selectEpisode(index, autoplay = false) {
   const episode = episodes[index];
-  source.src = `${releaseBase}/${episode.id}-scored.mp4`;
+  source.src = new URL(`media/${episode.id}-scored.mp4`, document.baseURI).href;
   video.load();
   title.textContent = `${episode.title} · ${episode.task.toLowerCase()}`;
   episodeId.textContent = episode.id;
