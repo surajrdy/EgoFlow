@@ -88,12 +88,25 @@ def render_dashboard(
         absolute = path if path.is_absolute() else Path.cwd() / path
         return Path(os.path.relpath(absolute.resolve(), output.parent.resolve())).as_posix()
 
+    selected_episode_ids = {row[0] for row in episodes}
     total_seconds = sum(row[2] for row in episodes)
     event_total = sum(
-        1 for rows in events_by_episode.values() for row in rows if row[3] == "LEARNED V2"
+        1
+        for episode_id, rows in events_by_episode.items()
+        for row in rows
+        if episode_id in selected_episode_ids and row[3] == "LEARNED V2"
     )
-    clean_total = sum(span[2] for rows in clean_by_episode.values() for span in rows)
-    manual_total = sum(len(rows) for rows in manual_by_episode.values())
+    clean_total = sum(
+        span[2]
+        for episode_id, rows in clean_by_episode.items()
+        for span in rows
+        if episode_id in selected_episode_ids
+    )
+    manual_total = sum(
+        len(rows)
+        for episode_id, rows in manual_by_episode.items()
+        if episode_id in selected_episode_ids
+    )
     cards: list[str] = []
     for episode_id, task, duration, completion, video_path in episodes:
         # The presentation surface stays intentionally narrow: learned hand-
@@ -204,7 +217,7 @@ main {{ max-width:1240px; margin:auto; padding:28px 38px 80px }} h1,h2,h3,p {{ m
 @media(max-width:900px) {{ main {{ padding:20px }} .intro,.hero,.reading,.notes {{ grid-template-columns:1fr }} .stats {{ grid-template-columns:1fr 1fr }} .stat {{ border-bottom:1px solid var(--rule) }} .flow {{ grid-template-columns:1fr }} .flow-arrow {{ transform:rotate(90deg); min-height:28px }} .episodes {{ grid-template-columns:1fr }} .catalog-head {{ align-items:start; flex-direction:column }} .controls {{ flex-wrap:wrap }} .episode-actions {{ flex-direction:column-reverse; align-items:flex-end }} }}
 </style></head><body><main>
 <div class="topline"><span class="brand">EGOFLOW</span><span class="version">Learned progress + learned interaction dynamics</span></div>
-<section class="intro"><div><p class="overline">Robotics data curation</p><h1>Find the moments worth reviewing in long demonstrations.</h1><p>EgoFlow keeps the continuous progress estimate separate from behavioral claims, then adds sparse, source-attributed interaction deviations for a human curator.</p></div><div class="claim"><b>25 minutes → a searchable review index</b><span>18 complete episodes · whole-episode train/validation/test split</span></div></section>
+<section class="intro"><div><p class="overline">Robotics data curation</p><h1>Find the moments worth reviewing in long demonstrations.</h1><p>EgoFlow keeps the continuous progress estimate separate from behavioral claims, then adds sparse, source-attributed interaction deviations for a human curator.</p></div><div class="claim"><b>{total_seconds/60:.1f} minutes → a searchable review index</b><span>{len(episodes)} featured episodes · whole-episode train/validation/test protocol</span></div></section>
 <section class="stats"><div class="stat"><b>{len(episodes)}</b><span>episodes</span></div><div class="stat"><b>{total_seconds/60:.1f} min</b><span>indexed video</span></div><div class="stat"><b>{event_total}</b><span>learned review windows</span></div><div class="stat"><b>{manual_total}</b><span>reviewed spans</span></div><div class="stat"><b>{clean_total/60:.1f} min</b><span>candidate-free spans ≥10s</span></div></section>
 <section class="hero"><div class="hero-media">{hero_media}</div><aside class="hero-copy"><p class="overline">Validation example · organizing plushies</p><h2>A subtle action switch, not a long stall.</h2><p>The reviewed span is 8–13 seconds. The learned expected-dynamics model identifies an unusual two-hand transition inside it.</p><div class="result"><b>{learned_event.get('start_sec','—')}–{learned_event.get('end_sec','—')} sec</b><span>{learned_event.get('surprise_mad','—')} MAD above expected hand dynamics · confidence {learned_event.get('confidence','—')}</span></div><p>The signal measures an unexpected interaction transition; the final semantic judgment stays with the reviewer.</p><div class="legend"><span class="key learned-v2">Learned interaction</span><span class="key learned">Learned progress</span><span class="key human">Reviewed span</span></div></aside></section>
 <section class="method"><p class="overline">System, briefly</p><h2>Two learned signals; one review queue.</h2><p class="section-intro">The coarse model answers “how far through the demonstration are we?” The short-horizon model asks “does this hand transition look unlike the manipulation dynamics learned from training episodes?”</p><div class="flow"><div class="flow-node"><b>1 · Public RGB video</b><span>Frames only. Dense semantic annotations are used when available, but were absent in this public run.</span></div><div class="flow-arrow">→</div><div class="flow-node branch"><div><b>Frozen DINO features</b><span>2-layer BiGRU learns coarse progress.</span></div><div><b>2D hand landmarks</b><span>Small GRU learns expected next-hand state.</span></div></div><div class="flow-arrow">→</div><div class="flow-node"><b>2 · Source-attributed signals</b><span>Progress, centered slowdown deviation, learned interaction surprise, and disclosed auxiliary evidence.</span></div><div class="flow-arrow">→</div><div class="flow-node"><b>3 · Curate</b><span>Review suspicious windows or export candidate-free segments longer than ten seconds.</span></div></div></section>
