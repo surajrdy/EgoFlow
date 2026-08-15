@@ -1,0 +1,34 @@
+{
+  "status": "frozen_before_test_prediction_review",
+  "split_unit": "whole episode",
+  "seed": 8,
+  "train": [
+    "69bb0c2aa29f5bdf2be964ea",
+    "69bb0c57a29f5bdf2be964ec",
+    "69bb0c7e411dd3347c32cacf",
+    "69bb0db038ec60c69cc22b43",
+    "69bb0db2f7dd56e062995cdc",
+    "69bb0de988fc21f706a47c29",
+    "69bb0e3eb29f2051d6451808",
+    "69bb0f603abe312e772beced",
+    "69bb0fc47c0ffa66dece83f1",
+    "69bb11f51e737760229bc606",
+    "69bb12294012b22f2ea5f5a6",
+    "69bb1284d385c444f34222a7"
+  ],
+  "validation": [
+    "69bb1239efeadec2abedad96",
+    "69bb08363abe312e772becaf",
+    "69bb0a998606a40f2af2a772"
+  ],
+  "blind_test": [
+    "69bb094cd10b1c996b2a38da",
+    "69bb0985d385c444f3422208",
+    "69bb0986d738810497993b87"
+  ],
+  "blind_test_prior_exposure": {
+    "69bb094cd10b1c996b2a38da": "unreviewed",
+    "69bb0985d385c444f3422208": "unreviewed",
+    "69bb0986d738810497993b87": "unreviewed"
+  }
+}

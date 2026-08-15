@@ -1,0 +1,61 @@
+# Local credentials and provider configuration
+.env
+.env.*
+!.env.*.example
+*.pem
+*.key
+credentials*.json
+secrets*.json
+
+# Python/build/test state
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# IDE / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Downloaded datasets, feature caches, and model weights
+data/
+datasets/
+downloads/
+cache/
+caches/
+*.zarr/
+*.npz
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# Generated run output. Curated, small result figures/summaries are allow-listed.
+outputs/
+logs/
+/results/
+hackathon/egoflow/results/*
+!hackathon/egoflow/results/blind_test_metrics.json
+!hackathon/egoflow/results/blind_test_review_queue.json
+!hackathon/egoflow/results/hand_v2_validation.json
+!hackathon/egoflow/results/interaction_v2_validation.json
+!hackathon/egoflow/results/frozen_split.json
+!hackathon/egoflow/results/hero/
+hackathon/egoflow/results/hero/*
+!hackathon/egoflow/results/hero/angry-bird-normalized-human-vs-model.png
+!hackathon/egoflow/results/hero/angry-bird-normalized-summary.json
+!hackathon/egoflow/results/hero/dashboard-preview.png
+*.mp4
+*.mov
+*.avi
+
+# Local source material
+EgoVerse Data Optimization & Evaluation Suite _ Gamma.pdf

@@ -1,0 +1,7 @@
+numpy>=1.26,<3
+zarr>=2.18,<4
+
+# Only needed when a Zarr has no precomputed dino.* arrays:
+# torch>=2.2
+# transformers>=4.40
+# pillow>=10

@@ -1,0 +1,231 @@
+{
+  "schema_version": "egoflow.score.v1",
+  "episode_id": "69bb1239efeadec2abedad96",
+  "task": "organizing_plushies",
+  "duration_sec": 69.75,
+  "completion_confidence": 0.9552,
+  "drop_score": 0.0448,
+  "productive_fraction": 0.4214,
+  "stall_fraction": 0.3214,
+  "regress_fraction": 0.0286,
+  "hesitation_fraction": 0.1286,
+  "recovery_count": 0,
+  "abandonment_count": 3,
+  "hesitations": [
+    {
+      "start_sec": 8.0,
+      "end_sec": 11.0,
+      "label": "hesitate",
+      "confidence": 0.9242,
+      "stage_id": 0,
+      "detector": "hybrid_learned_progress_visual_dynamics",
+      "reason": "normalized low progress plus visual slowdown/loop-back",
+      "learned_nonproductive_overlap": 1.0
+    },
+    {
+      "start_sec": 36.0,
+      "end_sec": 38.5,
+      "label": "hesitate",
+      "confidence": 0.8532,
+      "stage_id": 0,
+      "detector": "frozen_visual_dynamics",
+      "reason": "slowdown/loop-back",
+      "learned_nonproductive_overlap": 0.0
+    },
+    {
+      "start_sec": 41.25,
+      "end_sec": 44.0,
+      "label": "hesitate",
+      "confidence": 0.8419,
+      "stage_id": 0,
+      "detector": "frozen_visual_dynamics",
+      "reason": "slowdown/loop-back",
+      "learned_nonproductive_overlap": 0.0
+    }
+  ],
+  "recoveries": [],
+  "abandonments": [
+    {
+      "start_sec": 5.75,
+      "end_sec": 8.25,
+      "label": "abandon",
+      "confidence": 0.95,
+      "stage_id": 0,
+      "detector": "frozen_visual_dynamics",
+      "reason": "no visual recovery within 5 sec"
+    },
+    {
+      "start_sec": 22.0,
+      "end_sec": 24.5,
+      "label": "abandon",
+      "confidence": 0.95,
+      "stage_id": 0,
+      "detector": "frozen_visual_dynamics",
+      "reason": "no visual recovery within 5 sec"
+    },
+    {
+      "start_sec": 34.0,
+      "end_sec": 36.5,
+      "label": "abandon",
+      "confidence": 0.95,
+      "stage_id": 0,
+      "detector": "frozen_visual_dynamics",
+      "reason": "no visual recovery within 5 sec"
+    }
+  ],
+  "interesting_ranges": [
+    {
+      "start_sec": 0.0,
+      "end_sec": 0.75,
+      "label": "regress",
+      "confidence": 0.6493,
+      "stage_id": 0,
+      "detector": "learned_progress_normalized",
+      "reason": "stage-normalized progress velocity",
+      "annotation": "organizing plushies"
+    },
+    {
+      "start_sec": 1.0,
+      "end_sec": 21.0,
+      "label": "stall",
+      "confidence": 0.7209,
+      "stage_id": 0,
+      "detector": "learned_progress_normalized",
+      "reason": "stage-normalized progress velocity",
+      "annotation": "organizing plushies"
+    },
+    {
+      "start_sec": 63.25,
+      "end_sec": 68.75,
+      "label": "stall",
+      "confidence": 0.625,
+      "stage_id": 0,
+      "detector": "learned_progress_normalized",
+      "reason": "stage-normalized progress velocity",
+      "annotation": "organizing plushies"
+    },
+    {
+      "start_sec": 69.0,
+      "end_sec": 69.75,
+      "label": "regress",
+      "confidence": 0.6531,
+      "stage_id": 0,
+      "detector": "learned_progress_normalized",
+      "reason": "stage-normalized progress velocity",
+      "annotation": "organizing plushies"
+    },
+    {
+      "start_sec": 1.75,
+      "end_sec": 5.5,
+      "label": "stall",
+      "confidence": 0.7,
+      "stage_id": 0,
+      "detector": "frozen_visual_dynamics",
+      "reason": "bottom-decile visual motion"
+    },
+    {
+      "start_sec": 5.75,
+      "end_sec": 8.25,
+      "label": "abandon",
+      "confidence": 0.95,
+      "stage_id": 0,
+      "detector": "frozen_visual_dynamics",
+      "reason": "no visual recovery within 5 sec"
+    },
+    {
+      "start_sec": 5.75,
+      "end_sec": 8.25,
+      "label": "regress",
+      "confidence": 0.95,
+      "stage_id": 0,
+      "detector": "frozen_visual_dynamics",
+      "reason": "final-state similarity decreased"
+    },
+    {
+      "start_sec": 8.0,
+      "end_sec": 11.0,
+      "label": "hesitate",
+      "confidence": 0.9242,
+      "stage_id": 0,
+      "detector": "hybrid_learned_progress_visual_dynamics",
+      "reason": "normalized low progress plus visual slowdown/loop-back",
+      "learned_nonproductive_overlap": 1.0
+    },
+    {
+      "start_sec": 19.5,
+      "end_sec": 21.5,
+      "label": "stall",
+      "confidence": 0.7,
+      "stage_id": 0,
+      "detector": "frozen_visual_dynamics",
+      "reason": "bottom-decile visual motion"
+    },
+    {
+      "start_sec": 22.0,
+      "end_sec": 24.5,
+      "label": "abandon",
+      "confidence": 0.95,
+      "stage_id": 0,
+      "detector": "frozen_visual_dynamics",
+      "reason": "no visual recovery within 5 sec"
+    },
+    {
+      "start_sec": 22.0,
+      "end_sec": 24.5,
+      "label": "regress",
+      "confidence": 0.95,
+      "stage_id": 0,
+      "detector": "frozen_visual_dynamics",
+      "reason": "final-state similarity decreased"
+    },
+    {
+      "start_sec": 31.25,
+      "end_sec": 32.5,
+      "label": "stall",
+      "confidence": 0.7,
+      "stage_id": 0,
+      "detector": "frozen_visual_dynamics",
+      "reason": "bottom-decile visual motion"
+    },
+    {
+      "start_sec": 34.0,
+      "end_sec": 36.5,
+      "label": "abandon",
+      "confidence": 0.95,
+      "stage_id": 0,
+      "detector": "frozen_visual_dynamics",
+      "reason": "no visual recovery within 5 sec"
+    },
+    {
+      "start_sec": 34.0,
+      "end_sec": 36.5,
+      "label": "regress",
+      "confidence": 0.95,
+      "stage_id": 0,
+      "detector": "frozen_visual_dynamics",
+      "reason": "final-state similarity decreased"
+    },
+    {
+      "start_sec": 36.0,
+      "end_sec": 38.5,
+      "label": "hesitate",
+      "confidence": 0.8532,
+      "stage_id": 0,
+      "detector": "frozen_visual_dynamics",
+      "reason": "slowdown/loop-back",
+      "learned_nonproductive_overlap": 0.0
+    },
+    {
+      "start_sec": 41.25,
+      "end_sec": 44.0,
+      "label": "hesitate",
+      "confidence": 0.8419,
+      "stage_id": 0,
+      "detector": "frozen_visual_dynamics",
+      "reason": "slowdown/loop-back",
+      "learned_nonproductive_overlap": 0.0
+    }
+  ],
+  "synthetic": false,
+  "provenance_note": "Generated from supplied EgoFlow scores."
+}

@@ -1,0 +1,30 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "egoverse-modal"
+version = "0.1.0"
+description = "EgoFlow progress and hesitation modeling over EgoVerse on Modal"
+readme = "README.md"
+requires-python = ">=3.11,<3.15"
+dependencies = [
+    "modal==1.5.2",
+    "numpy>=1.26,<3",
+    "torch>=2.7,<2.8",
+]
+
+[dependency-groups]
+dev = [
+    "numpy>=1.26,<3",
+    "pillow>=10",
+    "pytest==9.1.1",
+    "torch>=2.7,<2.8",
+    "zarr>=2.18,<4",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["egoverse_modal", "hackathon"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "hackathon/egoflow/tests", "hackathon/milliaudit/tests"]

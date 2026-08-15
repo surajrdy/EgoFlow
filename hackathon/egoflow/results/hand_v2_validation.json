@@ -1,0 +1,30 @@
+{
+  "schema": "egoflow.hand_geometry.validation.v1",
+  "status": "experimental_validation_tuned_not_blind_tested",
+  "episodes": 18,
+  "sample_fps": 8.0,
+  "mean_hand_detection_rate": 0.9459,
+  "candidate_count": 90,
+  "candidate_cap_per_episode": 5,
+  "variant_comparison": [
+    {"name": "strict", "manual_span_overlaps": 2, "hero_overlap": false},
+    {"name": "brief_gap_soft_aperture", "manual_span_overlaps": 4, "hero_overlap": true},
+    {"name": "brief_gap_soft_aperture_strict_turn", "manual_span_overlaps": 4, "hero_overlap": true},
+    {"name": "brief_gap_soft_aperture_no_coupled_motion_filter", "manual_span_overlaps": 2, "hero_overlap": false}
+  ],
+  "selected_variant": "brief_gap_soft_aperture",
+  "hero_candidate": {
+    "episode_id": "69bb1239efeadec2abedad96",
+    "start_sec": 8.267,
+    "end_sec": 10.133,
+    "label": "aborted_reach",
+    "presentation_label": "ABORTED REACH?",
+    "source": "HAND EXPERIMENTAL",
+    "confidence": 0.7953,
+    "direction_change_deg": 171.2,
+    "incoming_displacement": 0.4829,
+    "outgoing_displacement": 0.3898,
+    "aperture_range": 1.0115
+  },
+  "claim_boundary": "The detector observes 2D hand redirection but cannot verify object A/B identity or persistent object displacement. The hero was used for validation and this result does not alter frozen metrics."
+}

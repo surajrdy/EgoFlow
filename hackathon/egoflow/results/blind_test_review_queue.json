@@ -1,0 +1,20 @@
+{
+  "selection_status": "reviewed_after_predictions_were_frozen",
+  "ranking_rule": "HYBRID proposals first, then confidence",
+  "windows": [
+    {"rank": 1, "episode_id": "69bb094cd10b1c996b2a38da", "task": "arranging_tableware", "start_sec": 39.5, "end_sec": 41.75, "confidence": 0.855, "source": "HYBRID", "human_verdict": "ambiguous", "human_note": "turning something around"},
+    {"rank": 2, "episode_id": "69bb0986d738810497993b87", "task": "organizing_dishes", "start_sec": 2.25, "end_sec": 4.5, "confidence": 0.799, "source": "HYBRID", "human_verdict": "correct"},
+    {"rank": 3, "episode_id": "69bb0986d738810497993b87", "task": "organizing_dishes", "start_sec": 28.75, "end_sec": 31.75, "confidence": 0.8729, "source": "AUX", "human_verdict": "ambiguous", "human_note": "slightly ambiguous"},
+    {"rank": 4, "episode_id": "69bb094cd10b1c996b2a38da", "task": "arranging_tableware", "start_sec": 82.75, "end_sec": 85.0, "confidence": 0.855, "source": "AUX", "human_verdict": "incorrect"},
+    {"rank": 5, "episode_id": "69bb094cd10b1c996b2a38da", "task": "arranging_tableware", "start_sec": 65.25, "end_sec": 67.75, "confidence": 0.836, "source": "AUX", "human_verdict": "incorrect"}
+  ],
+  "summary": {
+    "correct": 1,
+    "ambiguous": 2,
+    "incorrect": 2,
+    "strict_precision": 0.2,
+    "precision_including_ambiguous": 0.6,
+    "hybrid": {"correct": 1, "ambiguous": 1, "incorrect": 0},
+    "auxiliary_only": {"correct": 0, "ambiguous": 1, "incorrect": 2}
+  }
+}

@@ -1,0 +1,19 @@
+episode_id,task,review_status,notes
+69bb1284d385c444f34222a7,forming_dough_rings,reviewed,clean repetitive long-horizon manipulation
+69bb1239efeadec2abedad96,organizing_plushies,reviewed,hero hesitation example
+69bb12294012b22f2ea5f5a6,dishwashing,reviewed,clean productive episode
+69bb11f51e737760229bc606,organizing_dishes,reviewed,plate placement hesitation
+69bb0fc47c0ffa66dece83f1,placing_dishes,reviewed,clean pick-place with body movement
+69bb0f603abe312e772beced,loading_dishwasher,reviewed,good long-horizon episode
+69bb0e3eb29f2051d6451808,packing_parts,reviewed,early hesitation and waiting
+69bb0de988fc21f706a47c29,sorting_beads,reviewed,good repetitive fine manipulation
+69bb0db2f7dd56e062995cdc,loading_cutlery,reviewed,clean low-hesitation negative
+69bb0db038ec60c69cc22b43,organizing_documents,reviewed,very hesitation/failure-heavy early section
+69bb0c7e411dd3347c32cacf,organizing_cutlery,reviewed,mostly clean with late hesitation
+69bb0c57a29f5bdf2be964ec,organizing_tools,reviewed,clean low-hesitation negative
+69bb0c2aa29f5bdf2be964ea,arranging_table_setting,reviewed,multiple hesitation events
+69bb0a998606a40f2af2a772,organizing_food_items,reviewed,container hesitation
+69bb0986d738810497993b87,organizing_dishes,unreviewed,
+69bb0985d385c444f3422208,arranging_items,unreviewed,
+69bb094cd10b1c996b2a38da,arranging_tableware,unreviewed,
+69bb08363abe312e772becaf,organizing_cutlery,light_review,appears clean

@@ -1,0 +1,50 @@
+{
+  "protocol": {
+    "split_manifest": "frozen_split.json",
+    "train_episodes": 12,
+    "validation_episodes": 3,
+    "blind_test_episodes": 3,
+    "hero_split": "validation",
+    "checkpoint_step": 100,
+    "training_elapsed_sec": 15.352,
+    "threshold_policy": "fixed robust per-episode median/MAD and quantiles; no blind-test tuning"
+  },
+  "progress_sanity": {
+    "egoflow_pairwise_accuracy": 0.998192,
+    "time_fraction_baseline": 1.0,
+    "final_frame_cosine_baseline": 0.57588,
+    "pairs": 183639,
+    "interpretation": "Passes chronology sanity but does not beat the trivial clock baseline."
+  },
+  "true_prefix_completion": {
+    "25%": 0.913233,
+    "50%": 0.942633,
+    "75%": 0.956033,
+    "100%": 0.960767,
+    "full_higher_than_all_truncations": true
+  },
+  "true_prefix_drop_score": {
+    "25%": 0.086767,
+    "50%": 0.057367,
+    "75%": 0.043967,
+    "100%": 0.039233
+  },
+  "feature_perturbations": {
+    "auxiliary_stall_response": "3/3",
+    "auxiliary_reverse_response": "3/3",
+    "learned_reverse_response": "0/3",
+    "interpretation": "Frozen visual dynamics responded; the coarse learned reward remained nearly monotonic."
+  },
+  "blind_top5_human_review": {
+    "status": "reviewed after predictions were frozen",
+    "correct": 1,
+    "ambiguous": 2,
+    "incorrect": 2,
+    "strict_precision": 0.2,
+    "precision_including_ambiguous": 0.6,
+    "hybrid_strict": "1/2",
+    "hybrid_including_ambiguous": "2/2",
+    "auxiliary_strict": "0/3",
+    "auxiliary_including_ambiguous": "1/3"
+  }
+}

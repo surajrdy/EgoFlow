@@ -1,0 +1,23 @@
+{
+  "schema": "egoflow.interaction_dynamics.validation.v2",
+  "status": "validation_selected_frozen_before_new_blind_review",
+  "training_episodes": 12,
+  "input": "video-derived 2D hand position, aperture proxy, and short-horizon velocity",
+  "objective": "self-supervised next hand-state prediction",
+  "variants": [
+    {"hidden_size": 32, "window_frames": 8, "steps": 300, "examples": 11389, "final_smooth_l1": 0.036706},
+    {"hidden_size": 64, "window_frames": 16, "steps": 300, "examples": 11200, "final_smooth_l1": 0.044801}
+  ],
+  "selected": {"hidden_size": 32, "window_frames": 8, "threshold_mad": 6.0},
+  "hero_validation_event": {
+    "episode_id": "69bb1239efeadec2abedad96",
+    "start_sec": 8.433,
+    "end_sec": 9.833,
+    "label": "interaction_deviation",
+    "source": "LEARNED V2",
+    "confidence": 0.835,
+    "surprise_mad": 14.4161,
+    "hand": "both"
+  },
+  "claim_boundary": "The model learns expected 2D hand dynamics and detects an unusual transition. It does not identify object A/B or prove mental hesitation. Blind-test windows were scored after freezing and await prospective human review."
+}

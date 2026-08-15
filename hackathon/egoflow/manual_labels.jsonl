@@ -1,0 +1,9 @@
+{"episode_id":"69bb1239efeadec2abedad96","task":"organizing_plushies","start_sec":8.0,"end_sec":13.0,"label":"hesitate","note":"starts toward red Angry Bird plushie, hesitates, then leaves it"}
+{"episode_id":"69bb1239efeadec2abedad96","task":"organizing_plushies","start_sec":8.0,"end_sec":13.0,"label":"abandon","note":"intended manipulation is not followed through"}
+{"episode_id":"69bb11f51e737760229bc606","task":"organizing_dishes","start_sec":50.0,"end_sec":56.0,"label":"hesitate","note":"uncertain where to place plate"}
+{"episode_id":"69bb0e3eb29f2051d6451808","task":"packing_parts","start_sec":1.0,"end_sec":4.0,"label":"hesitate","note":"hesitation while placing nut bag"}
+{"episode_id":"69bb0db038ec60c69cc22b43","task":"organizing_documents","start_sec":0.0,"end_sec":30.0,"label":"other","note":"failure/hesitation-heavy region; broad stress-test label, excluded from precise timing metrics"}
+{"episode_id":"69bb0c7e411dd3347c32cacf","task":"organizing_cutlery","start_sec":60.0,"end_sec":64.0,"label":"hesitate","note":"hesitation while putting item in basket"}
+{"episode_id":"69bb0c2aa29f5bdf2be964ea","task":"arranging_table_setting","start_sec":0.0,"end_sec":4.0,"label":"hesitate","note":"picks and places object back in approximately same location"}
+{"episode_id":"69bb0c2aa29f5bdf2be964ea","task":"arranging_table_setting","start_sec":17.0,"end_sec":20.0,"label":"hesitate","note":"second visible hesitation around 18 seconds"}
+{"episode_id":"69bb0a998606a40f2af2a772","task":"organizing_food_items","start_sec":39.0,"end_sec":46.0,"label":"hesitate","note":"hesitation involving storage container"}

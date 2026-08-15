@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="520" viewBox="0 0 1100 520">
+<rect width="100%" height="100%" fill="#0b1020"/>
+<text x="80" y="34" fill="#f8fafc" font-family="sans-serif" font-size="23" font-weight="700">MilliAudit — Eva IK perturbation fragility</text>
+<text x="80" y="57" fill="#94a3b8" font-family="sans-serif" font-size="13">eva-generated-joint-sweep-smoke · empirical trajectory: false</text>
+<line x1="80" y1="430.0" x2="1070" y2="430.0" stroke="#263248" stroke-width="1"/>
+<text x="68" y="435.0" text-anchor="end" fill="#94a3b8" font-family="monospace" font-size="12">0.00</text>
+<line x1="80" y1="340.5" x2="1070" y2="340.5" stroke="#263248" stroke-width="1"/>
+<text x="68" y="345.5" text-anchor="end" fill="#94a3b8" font-family="monospace" font-size="12">0.25</text>
+<line x1="80" y1="251.0" x2="1070" y2="251.0" stroke="#263248" stroke-width="1"/>
+<text x="68" y="256.0" text-anchor="end" fill="#94a3b8" font-family="monospace" font-size="12">0.50</text>
+<line x1="80" y1="161.5" x2="1070" y2="161.5" stroke="#263248" stroke-width="1"/>
+<text x="68" y="166.5" text-anchor="end" fill="#94a3b8" font-family="monospace" font-size="12">0.75</text>
+<line x1="80" y1="72.0" x2="1070" y2="72.0" stroke="#263248" stroke-width="1"/>
+<text x="68" y="77.0" text-anchor="end" fill="#94a3b8" font-family="monospace" font-size="12">1.00</text>
+<polyline points="80.0,411.4 170.0,415.3 260.0,417.8 350.0,419.5 440.0,420.5 530.0,420.7 620.0,420.7 710.0,420.6 800.0,420.5 890.0,420.1 980.0,419.5 1070.0,418.6" fill="none" stroke="#22c55e" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="80.0,393.3 170.0,400.7 260.0,405.9 350.0,409.1 440.0,411.1 530.0,411.4 620.0,411.5 710.0,411.4 800.0,411.0 890.0,410.2 980.0,409.1 1070.0,407.5" fill="none" stroke="#f59e0b" stroke-width="3" stroke-linejoin="round"/>
+<polyline points="80.0,374.9 170.0,386.1 260.0,393.9 350.0,398.7 440.0,401.7 530.0,402.1 620.0,402.3 710.0,402.1 800.0,401.5 890.0,400.3 980.0,398.6 1070.0,396.2" fill="none" stroke="#ef4444" stroke-width="3" stroke-linejoin="round"/>
+<line x1="760" y1="45" x2="784" y2="45" stroke="#22c55e" stroke-width="4"/>
+<text x="791" y="50" fill="#e2e8f0" font-family="sans-serif" font-size="13">1 mm</text>
+<line x1="860" y1="45" x2="884" y2="45" stroke="#f59e0b" stroke-width="4"/>
+<text x="891" y="50" fill="#e2e8f0" font-family="sans-serif" font-size="13">2 mm</text>
+<line x1="960" y1="45" x2="984" y2="45" stroke="#ef4444" stroke-width="4"/>
+<text x="991" y="50" fill="#e2e8f0" font-family="sans-serif" font-size="13">3 mm</text>
+<text x="80.0" y="458" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="12">0.00s</text>
+<text x="327.5" y="458" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="12">1.38s</text>
+<text x="575.0" y="458" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="12">2.75s</text>
+<text x="822.5" y="458" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="12">4.12s</text>
+<text x="1070.0" y="458" text-anchor="middle" fill="#94a3b8" font-family="monospace" font-size="12">5.50s</text>
+<text x="575.0" y="496" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">trajectory time</text>
+<text x="22" y="251.0" transform="rotate(-90 22 251.0)" text-anchor="middle" fill="#cbd5e1" font-family="sans-serif" font-size="14">kinematic fragility score</text>
+<text x="80" y="470" fill="#94a3b8" font-family="sans-serif" font-size="11">IK feasibility sensitivity only; this does not demonstrate contact, task, or physical robot failure.</text>
+</svg>
