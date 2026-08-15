@@ -23,6 +23,11 @@ def main() -> int:
     parser.add_argument("scores", nargs="+", type=Path, help="score JSON files or directories")
     parser.add_argument("--database", type=Path, default=Path("results/egoflow-review.sqlite"))
     parser.add_argument("--video-dir", type=Path, help="optional directory containing EPISODE_ID.mp4")
+    parser.add_argument(
+        "--prefer-scored-video",
+        action="store_true",
+        help="prefer EPISODE_ID-scored.mp4 over a raw source video",
+    )
     parser.add_argument("--hand-events-dir", type=Path, help="optional directory containing EPISODE_ID.json")
     parser.add_argument("--interaction-events-dir", type=Path, help="optional learned-v2 EPISODE_ID.json directory")
     parser.add_argument("--manual-labels", type=Path)
@@ -36,6 +41,11 @@ def main() -> int:
         default=[],
         help="episode ID to include in the public dashboard (repeatable, ordered)",
     )
+    parser.add_argument(
+        "--include-research-events",
+        action="store_true",
+        help="show all sparse detector sources in a private/research dashboard",
+    )
     parser.add_argument("--min-clean-sec", type=float, default=10.0)
     parser.add_argument("--guard-sec", type=float, default=0.5)
     parser.add_argument("--slice-dir", type=Path, help="optionally export clean MP4 slices now")
@@ -48,7 +58,11 @@ def main() -> int:
         for episode_id in episode_ids:
             candidates = sorted(
                 args.video_dir.rglob(f"{episode_id}*.mp4"),
-                key=lambda path: ("source" not in path.stem, "scored" in path.stem, len(str(path))),
+                key=(
+                    (lambda path: ("scored" not in path.stem, "source" in path.stem, len(str(path))))
+                    if args.prefer_scored_video
+                    else (lambda path: ("source" not in path.stem, "scored" in path.stem, len(str(path))))
+                ),
             )
             if candidates:
                 videos[episode_id] = candidates[0]
@@ -80,6 +94,7 @@ def main() -> int:
             hero_image=args.hero_image,
             hero_video=args.hero_video,
             featured_episode_ids=args.featured_episode or None,
+            include_research_events=args.include_research_events,
         ))
     print(json.dumps(result, indent=2))
     return 0

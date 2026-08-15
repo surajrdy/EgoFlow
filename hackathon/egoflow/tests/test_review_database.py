@@ -55,3 +55,9 @@ def test_build_review_database_indexes_sources_and_clean_spans(tmp_path):
     assert 'data-action="watch"' in contents
     assert '<dialog id="viewer"' in contents
     assert "localStorage" not in contents
+    research_dashboard = render_dashboard(
+        database,
+        tmp_path / "research-dashboard.html",
+        include_research_events=True,
+    )
+    assert "HYBRID" in research_dashboard.read_text()

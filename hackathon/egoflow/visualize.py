@@ -615,9 +615,10 @@ def _compact_progress_canvas(
     canvas.text(35, 25, f"EGOFLOW / {series.episode_id}", COLORS["text"], 2, 55)
     canvas.rect(left, top, right, bottom, (17, 52, 47))
     for start, end, label in highlighted_runs:
-        if label == "interaction_deviation":
-            canvas.rect(x_for(start), top, max(x_for(start) + 3, x_for(end)), bottom, (77, 27, 35))
-            canvas.rect(x_for(start), top, max(x_for(start) + 3, x_for(end)), top + 5, COLORS["interaction_deviation"])
+        color = COLORS.get(label, COLORS["other"])
+        dark = tuple(max(12, int(channel * 0.34)) for channel in color)
+        canvas.rect(x_for(start), top, max(x_for(start) + 3, x_for(end)), bottom, dark)
+        canvas.rect(x_for(start), top, max(x_for(start) + 3, x_for(end)), top + 5, color)
     for event in manual_events:
         start = float(event.get("start_sec", 0.0))
         end = float(event.get("end_sec", start))
@@ -632,7 +633,7 @@ def _compact_progress_canvas(
     canvas.text(27, bottom - 7, "0%", COLORS["muted"], 1)
     canvas.text(left, 87, "LEARNED PROGRESS", COLORS["text"], 1)
     canvas.rect(right - 205, 84, right - 193, 96, COLORS["interaction_deviation"])
-    canvas.text(right - 187, 86, "REVIEW CANDIDATE", COLORS["muted"], 1)
+    canvas.text(right - 187, 86, "CANDIDATE WINDOWS", COLORS["muted"], 1)
 
     points = []
     for timestamp, progress in zip(series.timestamps_sec, series.global_progress):
@@ -640,12 +641,12 @@ def _compact_progress_canvas(
         points.append((timestamp, x_for(timestamp), y))
     for first, second in zip(points, points[1:]):
         midpoint = (first[0] + second[0]) / 2.0
-        in_candidate = any(
-            label == "interaction_deviation" and start <= midpoint <= end
-            for start, end, label in highlighted_runs
+        active_label = next(
+            (label for start, end, label in highlighted_runs if start <= midpoint <= end),
+            None,
         )
-        color = COLORS["interaction_deviation"] if in_candidate else (116, 225, 125)
-        canvas.line(first[1], first[2], second[1], second[2], color, 4 if in_candidate else 3)
+        color = COLORS.get(active_label, (116, 225, 125)) if active_label else (116, 225, 125)
+        canvas.line(first[1], first[2], second[1], second[2], color, 4 if active_label else 3)
     return canvas
 
 
@@ -673,7 +674,7 @@ def render_scored_mp4(
         return None
     fps = max(1.0, min(30.0, fps))
     frame_count = max(1, math.ceil(series.duration_sec * fps))
-    highlighted_runs = _top_event_runs(series, 1)
+    highlighted_runs = _top_event_runs(series, 5)
     highlighted_keys = {
         (round(start, 3), round(end, 3), label)
         for start, end, label in highlighted_runs
@@ -726,8 +727,8 @@ def render_scored_mp4(
             )
             frame.rect(35, 62, 430, 79, COLORS["grid"])
             progress_color = (
-                COLORS["interaction_deviation"]
-                if active_event and str(active_event.get("label")) == "interaction_deviation"
+                COLORS.get(str(active_event.get("label")), COLORS["other"])
+                if active_event
                 else COLORS["global"]
             )
             frame.rect(37, 64, 37 + round(391 * progress), 77, progress_color)
