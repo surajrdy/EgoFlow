@@ -179,10 +179,11 @@ caches and checkpoints are intentionally excluded from Git.
 ## Manual Evaluation
 
 For presentation, generate the searchable SQLite-backed catalog. It keeps all
-18 episode progress curves, source-attributed baseline and learned-v2 events,
-human labels, video links, and exportable candidate-free spans of at least ten
-seconds. Detailed tables stay collapsed until requested; buttons filter the
-simple episode cards by evidence layer.
+18 episode progress curves, learned-v2 interaction events, reviewed spans,
+video links, and exportable candidate-free spans of at least ten seconds. The
+demo surface intentionally hides legacy hybrid/auxiliary layers; their provenance
+remains in the archived evaluation JSON. “Review strongest” steps through ranked
+candidates, and “Keep in demo” saves a browser-local presentation shortlist.
 
 ```bash
 uv run python -m hackathon.egoflow.scripts.build_review_database \

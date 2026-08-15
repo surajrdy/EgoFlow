@@ -323,14 +323,6 @@ def _timeline_canvas(
         abs(local - global_value)
         for local, global_value in zip(series.local_progress, series.global_progress)
     ) < 1e-9
-    if same_progress_curve:
-        canvas.text(
-            max(470, width - 455),
-            57,
-            "GLOBAL MATCHES LOCAL / ONE SEMANTIC STAGE",
-            COLORS["human_gt"],
-            1,
-        )
     if series.synthetic:
         canvas.rect(width - 260, 20, width - 35, 57, (107, 61, 31))
         canvas.text(width - 247, 31, "SYNTHETIC DEMO", (255, 220, 164), 2)
@@ -345,26 +337,25 @@ def _timeline_canvas(
 
     if manual_events and not compact:
         band_top, band_bottom = top - 36, top - 17
-        canvas.text(left, band_top - 15, "HUMAN GROUND TRUTH", COLORS["human_gt"], 1)
+        canvas.text(left, band_top - 15, "REVIEW SPAN", COLORS["muted"], 1)
         for event in manual_events:
             start = float(event.get("start_sec", 0.0))
             end = float(event.get("end_sec", start))
-            canvas.rect(x_for(start), band_top, max(x_for(start) + 2, x_for(end)), band_bottom, COLORS["human_gt"])
-            label = str(event.get("label", "event"))
+            canvas.rect(x_for(start), band_top, max(x_for(start) + 2, x_for(end)), band_bottom, (220, 224, 228))
             canvas.text(
                 max(left, x_for(start)),
                 band_top + 5,
-                f"{start:.2f}-{end:.2f} {label}",
-                COLORS["text"],
+                f"{start:.2f}-{end:.2f}",
+                COLORS["panel"],
                 1,
             )
     elif manual_events and compact:
-        # A dedicated magenta strip keeps human labels visually separate from
-        # model event colors in the animated demo.
+        # Keep reviewed spans visible without adding another textual claim to
+        # the already compact video overlay. Provenance remains in the JSON.
         for event in manual_events:
             start = float(event.get("start_sec", 0.0))
             end = float(event.get("end_sec", start))
-            canvas.rect(x_for(start), top, max(x_for(start) + 2, x_for(end)), top + 9, COLORS["human_gt"])
+            canvas.rect(x_for(start), top, max(x_for(start) + 2, x_for(end)), top + 6, (220, 224, 228))
 
     displayed_runs = (
         _top_event_runs(series, max_display_events)
@@ -385,12 +376,14 @@ def _timeline_canvas(
     for fraction in (0.0, 0.25, 0.5, 0.75, 1.0):
         y = progress_bottom - round((progress_bottom - top) * fraction)
         canvas.line(left, y, right, y, COLORS["grid"])
-        canvas.text(10, y - 7, f"{fraction:.2f}", COLORS["muted"], 1)
+        if not compact or fraction in (0.0, 1.0):
+            canvas.text(10, y - 7, f"{fraction:.0%}" if compact else f"{fraction:.2f}", COLORS["muted"], 1)
     for fraction in (0.0, 0.25, 0.5, 0.75, 1.0):
         x = left + round((right - left) * fraction)
         canvas.line(x, top, x, progress_bottom, COLORS["grid"])
         canvas.line(x, velocity_top, x, velocity_bottom, COLORS["grid"])
-        canvas.text(max(0, x - 16), height - 49, f"{duration * fraction:.1f}s", COLORS["muted"], 1)
+        if not compact or fraction in (0.0, 0.5, 1.0):
+            canvas.text(max(0, x - 16), height - 49, f"{duration * fraction:.1f}s", COLORS["muted"], 1)
 
     def plot(values: list[float], color: tuple[int, int, int], lo: float, hi: float, y0: int, y1: int, width_px: int = 3) -> None:
         if len(values) < 2:
@@ -428,7 +421,7 @@ def _timeline_canvas(
         )
         for x in range(left, right, 10):
             canvas.line(x, guide_y, min(x + 5, right), guide_y, COLORS["guide"])
-    if residual:
+    if residual and not compact:
         for timestamp, value in zip(series.timestamps_sec, residual):
             y = velocity_bottom - round(
                 (velocity_bottom - velocity_top) * ((max(-vmax, min(vmax, value)) + vmax) / (2.0 * vmax))
@@ -449,9 +442,10 @@ def _timeline_canvas(
                 points.append((x_for(timestamp), y))
         for one, two in zip(points, points[1:]):
             canvas.line(*one, *two, COLORS["interaction_deviation"], 3)
-    canvas.text(10, velocity_top - 3, f"+{vmax:.2f}", COLORS["muted"], 1)
-    canvas.text(22, zero_y - 4, "0", COLORS["muted"], 1)
-    canvas.text(10, velocity_bottom - 8, f"-{vmax:.2f}", COLORS["muted"], 1)
+    if not compact:
+        canvas.text(10, velocity_top - 3, f"+{vmax:.2f}", COLORS["muted"], 1)
+        canvas.text(22, zero_y - 4, "0", COLORS["muted"], 1)
+        canvas.text(10, velocity_bottom - 8, f"-{vmax:.2f}", COLORS["muted"], 1)
 
     for start, end, label in displayed_runs:
         marker_t = (start + end) / 2.0
@@ -477,9 +471,9 @@ def _timeline_canvas(
         canvas.rect(left + 95, top - 25, left + 113, top - 8, COLORS["local"])
         canvas.text(left + 120, top - 24, "LOCAL", COLORS["text"], 1)
         legend_offset = 180
-    canvas.text(left, velocity_top - 25, "SLOWDOWN DEVIATION / EXPECTED - ACTUAL RATE", COLORS["text"], 1)
-    canvas.text(right - 226, velocity_top + 8, "SLOWER THAN EXPECTED / REVIEW", COLORS["muted"], 1)
-    canvas.text(right - 171, zero_y + 11, "FASTER THAN EXPECTED", COLORS["muted"], 1)
+    canvas.text(left, velocity_top - 25, "SLOWDOWN SIGNAL" if compact else "SLOWDOWN DEVIATION / EXPECTED - ACTUAL RATE", COLORS["text"], 1)
+    canvas.text(right - (76 if compact else 226), velocity_top + 8, "SLOWER" if compact else "SLOWER THAN EXPECTED / REVIEW", COLORS["muted"], 1)
+    canvas.text(right - (76 if compact else 171), zero_y + 11, "FASTER" if compact else "FASTER THAN EXPECTED", COLORS["muted"], 1)
     if not compact:
         canvas.text(left + 8, velocity_bottom - 18, f"ROBUST SCALE / GUIDES +/-{residual_guide:.2f} MAD", COLORS["muted"], 1)
 
@@ -487,11 +481,12 @@ def _timeline_canvas(
     shown_labels = {label for _, _, label in displayed_runs}
     shown = [label for label in EVENT_LABELS if label in shown_labels and label != "other"]
     shown.extend(label for label in sorted(shown_labels) if label not in shown and label != "other")
-    for index, label in enumerate(shown[:7]):
-        x = legend_x + (index % 4) * 145
-        y = top - 26 + (index // 4) * 19
-        canvas.rect(x, y, x + 12, y + 12, COLORS[label])
-        canvas.text(x + 17, y + 2, DISPLAY_LABELS.get(label, label), COLORS["muted"], 1)
+    if not compact:
+        for index, label in enumerate(shown[:7]):
+            x = legend_x + (index % 4) * 145
+            y = top - 26 + (index // 4) * 19
+            canvas.rect(x, y, x + 12, y + 12, COLORS[label])
+            canvas.text(x + 17, y + 2, DISPLAY_LABELS.get(label, label), COLORS["muted"], 1)
     if series.synthetic and not compact:
         canvas.text(left, height - 24, "SYNTHETIC SMOKE TEST - NOT A MODEL RESULT OR EMPIRICAL CLAIM", (255, 190, 107), 1)
     if show_event_intervals and not compact:
@@ -626,7 +621,7 @@ def render_scored_mp4(
         return None
     fps = max(1.0, min(30.0, fps))
     frame_count = max(1, math.ceil(series.duration_sec * fps))
-    highlighted_runs = _top_event_runs(series, 5)
+    highlighted_runs = _top_event_runs(series, 1)
     highlighted_keys = {
         (round(start, 3), round(end, 3), label)
         for start, end, label in highlighted_runs
@@ -638,15 +633,10 @@ def render_scored_mp4(
         height=300,
         compact=True,
         manual_events=manual_events,
-        max_display_events=5,
+        max_display_events=1,
     )
     left, right = 82, 925
     top, bottom = 86, 285
-    raw_rate_residual, _, _, _ = progress_rate_residual(
-        series.timestamps_sec,
-        series.progress_velocity,
-    )
-    slowdown_deviation = [-value for value in raw_rate_residual]
     with tempfile.TemporaryDirectory(prefix="egoflow_overlay_") as temp_dir:
         temp = Path(temp_dir)
         for frame_index in range(frame_count):
@@ -702,12 +692,14 @@ def render_scored_mp4(
             if active_event:
                 raw_label = str(active_event.get("label", "review"))
                 status_label = (
-                    "NEGATIVE RATE" if raw_label == "regress" else f"{raw_label.upper()}?"
+                    "REVIEW CANDIDATE"
+                    if raw_label == "interaction_deviation"
+                    else "NEGATIVE RATE"
+                    if raw_label == "regress"
+                    else f"{raw_label.replace('_', ' ').upper()}?"
                 )
             else:
-                state_index = int(state["index"])
-                current_deviation = slowdown_deviation[state_index] if slowdown_deviation else 0.0
-                status_label = f"DEVIATION {current_deviation:+.2f}"
+                status_label = "MONITORING"
             status_color = (
                 COLORS.get(str(active_event.get("label")), COLORS["other"])
                 if active_event
@@ -718,12 +710,12 @@ def render_scored_mp4(
             detail = (
                 f"{source} / CONF {float(active_event.get('confidence', 0.0)):.2f}"
                 if active_event
-                else "+ SLOWER / 0 EXPECTED / - FASTER"
+                else "LEARNED PROGRESS + INTERACTION CHECK"
             )
             frame.text(514, 51, detail, COLORS["text"], 1, 45)
             if in_human:
-                frame.rect(500, 61, 925, 80, COLORS["human_gt"])
-                frame.text(514, 65, f"HUMAN GT / {in_human.get('label', 'event')}", COLORS["text"], 1, 45)
+                frame.rect(500, 61, 925, 80, (69, 76, 84))
+                frame.text(514, 65, "REVIEW SPAN", COLORS["text"], 1, 45)
             frame.write_png(temp / f"frame_{frame_index:06d}.png")
         output_path.parent.mkdir(parents=True, exist_ok=True)
         command = [

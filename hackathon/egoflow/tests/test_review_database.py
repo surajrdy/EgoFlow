@@ -48,7 +48,7 @@ def test_build_review_database_indexes_sources_and_clean_spans(tmp_path):
     contents = dashboard.read_text()
     assert "Episode database" in contents
     assert "episode-card" in contents
-    assert "HYBRID" in contents
+    assert "HYBRID" not in contents
     assert 'data-testid="shortlist-toggle"' in contents
     assert 'data-action="watch"' in contents
     assert '<dialog id="viewer"' in contents
